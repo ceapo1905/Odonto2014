@@ -1,0 +1,266 @@
+# Docentes - Derecho
+## Descripción
+Aquí presentamos los resultados de las encuestas de `evaluación institucional` llevada a cabo en junio del 2014 en la que se recabaron datos de los docentes de la carrera de `Derecho` de la Facultad de Ciencias Jurídicas de la Universidad del Norte. La encuesta consistió en un formulario de `110 preguntas` evaluando cada una de las siguientes dimensiones:
+
+* Dimensión 1: Organización & Gestión
+    * 1.1: Organización
+    * 1.2: Gestión
+* Dimensión 2: Proyecto Académico
+    * 2.1: Objetivos de carrerra y Perfil de Egreso
+    * 2.2: Plan de estudios
+    * 2.3: Proceso enseñanza-aprendizaje
+    * 2.4: Evaluación del proceso enseñanza-aprendizaje
+    * 2.5: Investigación y extensión
+* Dimensión 3: Personas
+    * 3.1: Directivos
+    * 3.2: Docentes
+    * 3.3: Estudiantes
+    * 3.4: Personal administrativo y de apoyo
+* Dimensión 4: Recursos
+    * 4.1: Infraestructura, equipamientos e insumos
+    * 4.2: Financiamiento
+* Dimensión 5: Resultados & Impacto
+    * 5.1: Egresados
+    * 5.2: Impacto social
+
+El formulario de encuesta también incluyó preguntas acerca del `Año de Contratación` del docente. Se obtuvieron `24` formularios de respuestas, los cuales fueron cargados en una base de datos en formato `.csv` para su análisis estadístico. Los datos fueron procesados y analizados con [R](http://www.r-project.org) versión 3.1.0. Este documento fue redactado utilizando MarkDown en [RStudio](http://www.rstudio.com) versión 0.98.932 y el paquete [knitr](http://cran.r-project.org/web/packages/knitr/index.html) versión 1.6 de [Yihui Xie](http://yihui.name/knitr).
+
+## Preprocesamiento de datos
+Primero definimos las características globales del reporte y cargamos la base de datos:
+```{r dataset}
+require(knitr)
+opts_chunk$set(warning = FALSE, message = FALSE, fig.height = 8, fig.width = 14)
+data.docentes <- read.csv("/home/ceapo1905/Documents/1 Science/1 Dirección de Investigaciones Científicas/Autoevaluación Institucional/Ciencias Jurídicas/Derecho/Derecho2014Docentes.csv")
+```
+
+Recodificamos todos los niveles para todas las variables que representan preguntas, utilizando las etiquetas establecidas en el formulario:
+```{r levels}
+require(plyr)
+for(i in 2:111){
+data.docentes[, i] <- factor(data.docentes[, i])
+data.docentes[, i] <- revalue(data.docentes[, i], c("1" = "Sí", "2" = "No", "3" = "En parte", "4" = "Sin opinión/No sabe"))}
+```
+
+Cargamos las preguntas contenidas en el formulario:
+```{r questions}
+source("/home/ceapo1905/Documents/1 Science/1 Dirección de Investigaciones Científicas/Autoevaluación Institucional/Ciencias Jurídicas/Derecho/Docentes/DocentesQ.R")
+```
+
+***
+## Resultados
+Para la presentación de los resultados utilizaremos gráficos de barras, según la siguiente función:
+```{r}
+Q.plots <- function(x, y){
+table.Q <- prop.table(table(x))*100
+par(mar = c(2,5,7,2) + 0.1)
+plot.Q <- barplot(table.Q, main = y, cex.main = 2, col = terrain.colors(9),
+                  ylab = "% Docentes", cex.lab = 1.5, cex.axis = 1.2, cex.names = 1.5)
+text(plot.Q, 2, round(table.Q, 1), cex = 1.5)
+}
+```
+La distribución por `Año de Contratación` fue la siguiente:
+```{r Contratación, fig.width = 15}
+Q.plots(data.docentes$contrato, Contrato)
+```
+
+A continuación presentarmos los resultados de las respuestas dadas por los docentes.
+
+***
+### Dimensión 1.1 - Organización
+Los resultados de esta dimensión son los siguientes:
+```{r Q11}
+Q.plots(data.docentes$Q11a, Q11a)
+Q.plots(data.docentes$Q11b, Q11b)
+Q.plots(data.docentes$Q11c, Q11c)
+Q.plots(data.docentes$Q11d, Q11d)
+Q.plots(data.docentes$Q11e, Q11e)
+Q.plots(data.docentes$Q11f, Q11f)
+Q.plots(data.docentes$Q11g, Q11g)
+Q.plots(data.docentes$Q11h, Q11h)
+```
+
+***
+### Dimensión 1.2 - Gestión
+Los resultados de esta dimensión son los siguientes:
+```{r Q12}
+Q.plots(data.docentes$Q12a, Q12a)
+Q.plots(data.docentes$Q12b, Q12b)
+Q.plots(data.docentes$Q12c, Q12c)
+Q.plots(data.docentes$Q12d, Q12d)
+Q.plots(data.docentes$Q12e, Q12e)
+Q.plots(data.docentes$Q12f, Q12f)
+Q.plots(data.docentes$Q12g, Q12g)
+Q.plots(data.docentes$Q12h, Q12h)
+Q.plots(data.docentes$Q12i, Q12i)
+```
+
+***
+### Dimensión 2.1 - Objetivos de la carrera y Perfil de Egreso
+Los resultados de esta dimensión son los siguientes:
+```{r Q21}
+Q.plots(data.docentes$Q21a, Q21a)
+Q.plots(data.docentes$Q21b, Q21b)
+Q.plots(data.docentes$Q21c, Q21c)
+Q.plots(data.docentes$Q21d, Q21d)
+Q.plots(data.docentes$Q21e, Q21e)
+```
+
+***
+### Dimensión 2.2 - Plan de Estudios
+Los resultados de esta dimensión son los siguientes:
+```{r Q22}
+Q.plots(data.docentes$Q22a, Q22a)
+Q.plots(data.docentes$Q22b, Q22b)
+Q.plots(data.docentes$Q22c, Q22c)
+Q.plots(data.docentes$Q22d, Q22d)
+Q.plots(data.docentes$Q22e, Q22e)
+Q.plots(data.docentes$Q22f, Q22f)
+Q.plots(data.docentes$Q22g, Q22g)
+Q.plots(data.docentes$Q22h, Q22h)
+Q.plots(data.docentes$Q22i, Q22i)
+```
+
+***
+### Dimensión 2.3 - Proceso enseñanza-aprendizaje
+Los resultados de esta dimensión son los siguientes:
+```{r Q23}
+Q.plots(data.docentes$Q23a, Q23a)
+Q.plots(data.docentes$Q23b, Q23b)
+Q.plots(data.docentes$Q23c, Q23c)
+Q.plots(data.docentes$Q23d, Q23d)
+Q.plots(data.docentes$Q23e, Q23e)
+Q.plots(data.docentes$Q23f, Q23f)
+Q.plots(data.docentes$Q23g, Q23g)
+Q.plots(data.docentes$Q23h, Q23h)
+Q.plots(data.docentes$Q23i, Q23i)
+Q.plots(data.docentes$Q23j, Q23j)
+Q.plots(data.docentes$Q23k, Q23k)
+```
+
+***
+### Dimensión 2.4 - Evaluación del proceso enseñanza-aprendizaje
+Los resultados de esta dimensión son los siguientes:
+```{r Q24}
+Q.plots(data.docentes$Q24a, Q24a)
+Q.plots(data.docentes$Q24b, Q24b)
+Q.plots(data.docentes$Q24c, Q24c)
+```
+
+***
+### Dimensión 2.5 - Investigación & extensión
+Los resultados de esta dimensión son los siguientes:
+```{r Q25}
+Q.plots(data.docentes$Q25a, Q25a)
+Q.plots(data.docentes$Q25b, Q25b)
+Q.plots(data.docentes$Q25c, Q25c)
+Q.plots(data.docentes$Q25d, Q25d)
+Q.plots(data.docentes$Q25e, Q25e)
+Q.plots(data.docentes$Q25f, Q25f)
+Q.plots(data.docentes$Q25g, Q25g)
+Q.plots(data.docentes$Q25h, Q25h)
+Q.plots(data.docentes$Q25i, Q25i)
+Q.plots(data.docentes$Q25j, Q25j)
+```
+
+***
+### Dimensión 3.1 - Directivos
+Los resultados de esta dimensión son los siguientes:
+```{r Q31}
+Q.plots(data.docentes$Q31a, Q31a)
+Q.plots(data.docentes$Q31b, Q31b)
+Q.plots(data.docentes$Q31c, Q31c)
+Q.plots(data.docentes$Q31d, Q31d)
+```
+
+***
+### Dimensión 3.2 - Docentes
+Los resultados de esta dimensión son los siguientes:
+```{r Q32}
+Q.plots(data.docentes$Q32a, Q32a)
+Q.plots(data.docentes$Q32b, Q32b)
+Q.plots(data.docentes$Q32c, Q32c)
+Q.plots(data.docentes$Q32d, Q32d)
+Q.plots(data.docentes$Q32e, Q32e)
+```
+
+***
+### Dimensión 3.3 - Estudiantes
+Los resultados de esta dimensión son los siguientes:
+```{r Q33}
+Q.plots(data.docentes$Q33a, Q33a)
+Q.plots(data.docentes$Q33b, Q33b)
+Q.plots(data.docentes$Q33c, Q33c)
+Q.plots(data.docentes$Q33d, Q33d)
+Q.plots(data.docentes$Q33e, Q33e)
+Q.plots(data.docentes$Q33f, Q33f)
+```
+
+***
+### Dimensión 3.4 - Personal administrativo y de apoyo
+Los resultados de esta dimensión son los siguientes:
+```{r Q34}
+Q.plots(data.docentes$Q34a, Q34a)
+Q.plots(data.docentes$Q34b, Q34b)
+Q.plots(data.docentes$Q34c, Q34c)
+Q.plots(data.docentes$Q34d, Q34d)
+```
+
+***
+### Dimensión 4.1 - Infraestructura, equipamientos e insumos
+Los resultados de esta dimensión son los siguientes:
+```{r Q41}
+Q.plots(data.docentes$Q41a, Q41a)
+Q.plots(data.docentes$Q41b, Q41b)
+Q.plots(data.docentes$Q41c, Q41c)
+Q.plots(data.docentes$Q41d, Q41d)
+Q.plots(data.docentes$Q41e, Q41e)
+Q.plots(data.docentes$Q41f, Q41f)
+Q.plots(data.docentes$Q41g, Q41g)
+Q.plots(data.docentes$Q41h, Q41h)
+Q.plots(data.docentes$Q41i, Q41i)
+Q.plots(data.docentes$Q41j, Q41j)
+Q.plots(data.docentes$Q41k, Q41k)
+Q.plots(data.docentes$Q41l, Q41l)
+Q.plots(data.docentes$Q41m, Q41m)
+Q.plots(data.docentes$Q41n, Q41n)
+Q.plots(data.docentes$Q41o, Q41o)
+Q.plots(data.docentes$Q41p, Q41p)
+Q.plots(data.docentes$Q41q, Q41q)
+Q.plots(data.docentes$Q41r, Q41r)
+Q.plots(data.docentes$Q41s, Q41s)
+Q.plots(data.docentes$Q41t, Q41t)
+```
+
+***
+### Dimensión 4.2 - Financiamiento
+Los resultados de esta dimensión son los siguientes:
+```{r Q42}
+Q.plots(data.docentes$Q42a, Q42a)
+Q.plots(data.docentes$Q42b, Q42b)
+Q.plots(data.docentes$Q42c, Q42c)
+```
+
+***
+### Dimensión 5.1 - Egresados
+Los resultados de esta dimensión son los siguientes:
+```{r Q43}
+Q.plots(data.docentes$Q43a, Q43a)
+Q.plots(data.docentes$Q43b, Q43b)
+Q.plots(data.docentes$Q43c, Q43c)
+Q.plots(data.docentes$Q43d, Q43d)
+Q.plots(data.docentes$Q43e, Q43e)
+Q.plots(data.docentes$Q43f, Q43f)
+Q.plots(data.docentes$Q43g, Q43g)
+Q.plots(data.docentes$Q43h, Q43h)
+Q.plots(data.docentes$Q43i, Q43i)
+```
+
+***
+### Dimensión 5.2 - Impacto social
+Los resultados de esta dimensión son los siguientes:
+```{r Q44}
+Q.plots(data.docentes$Q44a, Q44a)
+Q.plots(data.docentes$Q44b, Q44b)
+Q.plots(data.docentes$Q44c, Q44c)
+Q.plots(data.docentes$Q44d, Q44d)
+```
